@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import pix from "./babe.jpeg";
+import DisplayCard from "./DisplayCard";
 
 const BuildSideScreen = () => {
+	const [display, setDisplay] = useState(false);
 	return (
 		<Container>
 			<Wrapper>
@@ -22,9 +24,25 @@ const BuildSideScreen = () => {
 				<Text>
 					<Holder>
 						<Image1 src={pix} />
+
 						<Hold>
-							<Name>name</Name>
+							<RealName
+								onMouseEnter={() => {
+									setDisplay(true);
+								}}
+								onMouseLeave={() => {
+									setDisplay(false);
+								}}
+							>
+								name
+							</RealName>
 							<Profile>profile</Profile>
+
+							{display ? (
+								<Div>
+									<DisplayCard setDisplay={setDisplay} />{" "}
+								</Div>
+							) : null}
 						</Hold>
 					</Holder>
 
@@ -37,6 +55,11 @@ const BuildSideScreen = () => {
 
 export default BuildSideScreen;
 
+const Div = styled.div`
+	position: absolute;
+	top: -3px;
+`;
+
 const Image1 = styled.img`
 	width: 35px;
 	height: 35px;
@@ -47,7 +70,7 @@ const Image1 = styled.img`
 
 const Content = styled.div`
 	cursor: pointer;
-	color: #69bff8;
+	color: rgb(16, 143, 233);
 `;
 
 const Action = styled.div`
@@ -61,7 +84,6 @@ const Suggest = styled.div`
 	font-weight: 700;
 	font-size: 13px;
 	color: gray;
-	cursor: pointer;
 `;
 const Text = styled.div`
 	margin: 30px 0;
@@ -73,11 +95,39 @@ const Text = styled.div`
 const Profile = styled.div`
 	font-size: 12px;
 `;
+const RealName = styled.div`
+	font-size: 12px;
+	font-weight: 700;
+	position: relative;
+	z-index: 10;
+
+	:after {
+		content: "";
+		height: 2px;
+		background-color: purple;
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		opacity: 0;
+		transition: all 350ms;
+	}
+
+	:hover {
+		cursor: pointer;
+		:after {
+			opacity: 1;
+		}
+	}
+`;
+
 const Name = styled.div`
 	font-weight: 700;
 	font-size: 12px;
 `;
-const Hold = styled.div``;
+const Hold = styled.div`
+	position: relative;
+`;
 
 const Image = styled.img`
 	width: 50px;
