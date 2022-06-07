@@ -78,7 +78,7 @@ const SearchBar = styled.div`
 	border: 1px solid silver;
 	height: 40px;
 	border-radius: 5px;
-	background-color: lightgray;
+	background-color: l#fafafa;
 
 	@media screen and (max-width: 642px) {
 		width: 250px;
