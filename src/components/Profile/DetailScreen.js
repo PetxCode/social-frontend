@@ -108,12 +108,31 @@ const DetailScreen = () => {
 						</Title>
 					</NavHolder>
 				</Nav>
+
+				<PostImages>
+					<ImagePost src={pix} />
+					<ImagePost src={pix} />
+					<ImagePost src={pix} />
+				</PostImages>
 			</Wrapper>
 		</Container>
 	);
 };
 
 export default DetailScreen;
+
+const ImagePost = styled.img`
+	width: 250px;
+	height: 250px;
+	object-fit: cover;
+`;
+
+const PostImages = styled.div`
+	width: 100%;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	display: flex;
+`;
 
 const NavIcon3 = styled(BsPersonBoundingBox)`
 	font-size: 10px;
@@ -158,7 +177,6 @@ const Nav = styled.div`
 	display: flex;
 	justify-content: center;
 	border-top: 1px solid silver;
-	border-bottom: 1px solid silver;
 	padding: 20px 0;
 `;
 
@@ -246,7 +264,6 @@ const Top = styled.div`
 
 const Wrapper = styled.div`
 	width: 768px;
-	background-color: white;
 `;
 
 const Container = styled.div`
