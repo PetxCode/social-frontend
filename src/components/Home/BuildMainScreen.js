@@ -82,6 +82,7 @@ const Comment = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	font-size: 15px;
 	span {
 		margin-right: 5px;
 		font-weight: 700;
@@ -96,12 +97,13 @@ const Comment = styled.div`
 const View = styled.div`
 	color: lightgray;
 	margin: 20px;
+	font-size: 15px;
 `;
 
 const Text = styled.div`
 	font-weight: bold;
 	color: lightblue;
-	font-size: 18px;
+	font-size: 15px;
 	text-transform: uppercase;
 	margin-right: 12px;
 
@@ -115,11 +117,11 @@ const Input = styled.input`
 	border: 0;
 	background-color: transparent;
 	flex: 1;
-	font-size: 18px;
+	font-size: 15px;
 
 	::placeholder {
 		font-family: Poppins;
-		font-size: 18px;
+		font-size: 15px;
 	}
 `;
 
@@ -130,8 +132,9 @@ const PostIcon = styled(FaRegSmileWink)`
 const PostInput = styled.div`
 	display: flex;
 	padding: 20px 0;
-
+	font-size: 15px;
 	border-top: 1px solid silver;
+	align-items: center;
 `;
 
 const Content = styled.div``;
@@ -148,7 +151,7 @@ const Time = styled.div`
 const Post = styled.div`
 	margin: 0 20px;
 	display: flex;
-	font-size: 18px;
+	font-size: 15px;
 	span {
 		margin-right: 5px;
 		font-weight: 500;
@@ -162,7 +165,7 @@ const Post = styled.div`
 const LikePost = styled.div`
 	margin-left: 20px;
 	margin-top: 15px;
-	font-size: 20px;
+	font-size: 15px;
 	font-family: Poppins;
 	span {
 		font-weight: 700;
@@ -171,7 +174,7 @@ const LikePost = styled.div`
 `;
 
 const CommentIcon = styled(FaRegComment)`
-	font-size: 30px;
+	font-size: 25px;
 	transition: all 350ms;
 	color: gray;
 	margin-right: 20px;
@@ -182,7 +185,7 @@ const CommentIcon = styled(FaRegComment)`
 	}
 `;
 const SendIcon = styled(FiSend)`
-	font-size: 30px;
+	font-size: 25px;
 	transition: all 350ms;
 	color: gray;
 	margin-right: 20px;
@@ -193,7 +196,7 @@ const SendIcon = styled(FiSend)`
 	}
 `;
 const SavedIcon = styled(BsBookmark)`
-	font-size: 30px;
+	font-size: 25px;
 	transition: all 350ms;
 	color: gray;
 
@@ -216,7 +219,7 @@ const LoveIconComment = styled(AiOutlineHeart)`
 `;
 
 const LoveIcon = styled(AiOutlineHeart)`
-	font-size: 35px;
+	font-size: 29px;
 	transition: all 350ms;
 	color: gray;
 	margin-right: 20px;
@@ -232,6 +235,7 @@ const Icons = styled.div`
 	justify-content: space-between;
 	margin: 0 20px;
 	align-items: center;
+	margin-top: 10px;
 `;
 
 const PostImage = styled.img`
@@ -241,17 +245,20 @@ const PostImage = styled.img`
 `;
 
 const DotIcon = styled(BsThreeDots)`
-	font-size: 30px;
-	color: silver;
+	font-size: 20px;
+	color: black;
 `;
-const Profile = styled.div``;
+const Profile = styled.div`
+	margin-top: 3px;
+`;
 const Hold = styled.div`
 	display: flex;
+	font-size: 12px;
 `;
 
 const ProfileName = styled.div`
 	font-weight: 700;
-	font-size: 20px;
+	font-size: 12px;
 `;
 
 const ProfileHolder = styled.div`
@@ -259,11 +266,11 @@ const ProfileHolder = styled.div`
 `;
 
 const ImageProfile = styled.img`
-	width: 50px;
-	height: 50px;
+	width: 35px;
+	height: 35px;
 	object-fit: cover;
 	border-radius: 50px;
-	outline: 4px solid purple;
+	outline: 2px solid purple;
 	border: 2px solid transparent;
 	background-clip: content-box;
 	margin-right: 15px;
@@ -271,10 +278,11 @@ const ImageProfile = styled.img`
 
 const Top = styled.div`
 	display: flex;
-	margin: 20px;
+	margin: 0px 20px;
 	padding: 10px 0;
 	justify-content: space-between;
 	align-items: center;
+	border-bottom: 1px solid silver;
 `;
 
 const PostBuild = styled.div`
@@ -287,14 +295,15 @@ const PostBuild = styled.div`
 
 const Name = styled.div`
 	margin-top: 5px;
+	font-size: 11px;
 `;
 
 const Image = styled.img`
-	width: 90px;
-	height: 90px;
+	width: 60px;
+	height: 60px;
 	border-radius: 50%;
 	object-fit: cover;
-	outline: 4px solid purple;
+	outline: 2px solid purple;
 	border: 2px solid transparent;
 	background-clip: content-box;
 `;

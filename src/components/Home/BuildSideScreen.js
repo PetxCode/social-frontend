@@ -38,8 +38,8 @@ const BuildSideScreen = () => {
 export default BuildSideScreen;
 
 const Image1 = styled.img`
-	width: 60px;
-	height: 60px;
+	width: 35px;
+	height: 35px;
 	border-radius: 50%;
 	object-fit: cover;
 	margin-right: 10px;
@@ -54,11 +54,12 @@ const Action = styled.div`
 	cursor: pointer;
 	text-transform: uppercase;
 	font-weight: 900;
+	font-size: 12px;
 `;
 
 const Suggest = styled.div`
 	font-weight: 700;
-	font-size: 19px;
+	font-size: 13px;
 	color: gray;
 	cursor: pointer;
 `;
@@ -69,15 +70,18 @@ const Text = styled.div`
 	align-items: center;
 `;
 
-const Profile = styled.div``;
+const Profile = styled.div`
+	font-size: 12px;
+`;
 const Name = styled.div`
 	font-weight: 700;
+	font-size: 12px;
 `;
 const Hold = styled.div``;
 
 const Image = styled.img`
-	width: 70px;
-	height: 70px;
+	width: 50px;
+	height: 50px;
 	border-radius: 50%;
 	object-fit: cover;
 	margin-right: 10px;
@@ -89,10 +93,10 @@ const Holder = styled.div`
 `;
 
 const Wrapper = styled.div`
-	margin-left: 50px;
-	width: 400px;
+	margin-left: 20px;
+	width: 85%;
 `;
 const Container = styled.div`
-	width: 100%;
+	width: 400px;
 	position: fixed;
 `;

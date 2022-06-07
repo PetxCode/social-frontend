@@ -30,8 +30,8 @@ export default Header;
 // const SearchBarIcon = styled.div``;
 
 const Image = styled.img`
-	width: 50px;
-	height: 50px;
+	width: 30px;
+	height: 30px;
 	border-radius: 50%;
 	object-fit: cover;
 	cursor: pointer;
@@ -60,7 +60,7 @@ const SearchInput = styled.input`
 	outline: none;
 	border: 0;
 	background-color: transparent;
-	font-size: 20px;
+	font-size: 16px;
 
 	::placeholder {
 		font-family: Poppins;
@@ -79,6 +79,18 @@ const SearchBar = styled.div`
 	height: 40px;
 	border-radius: 5px;
 	background-color: lightgray;
+
+	@media screen and (max-width: 642px) {
+		width: 250px;
+	}
+
+	@media screen and (max-width: 549px) {
+		width: 200px;
+	}
+
+	@media screen and (max-width: 425px) {
+		display: none;
+	}
 `;
 
 const Logo = styled.div`
@@ -86,6 +98,11 @@ const Logo = styled.div`
 	font-weight: 500;
 	font-size: 25px;
 	font-style: italic;
+	font-family: Pacifico;
+	line-height: 1;
+	@media screen and (max-width: 768px) {
+		margin-right: 20px;
+	}
 `;
 
 const Hold = styled.div`
@@ -95,7 +112,7 @@ const Hold = styled.div`
 `;
 
 const Wrapper = styled.div`
-	width: 90%;
+	width: 900px;
 	display: flex;
 	align-items: center;
 	height: 100%;
@@ -104,7 +121,7 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
 	width: 100%;
-	height: 70px;
+	height: 60px;
 	display: flex;
 	justify-content: center;
 	border-bottom: 1px solid silver;

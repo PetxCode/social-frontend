@@ -24,29 +24,35 @@ const SideScreen = styled.div`
 	width: 400px;
 	display: flex;
 	justify-content: flex-start;
-	@media screen and (max-width: 1000px) {
+
+	@media screen and (max-width: 900px) {
 		display: none;
 	}
 `;
 
 const MainScreen = styled.div`
-	width: 600px;
+	width: 550px;
 	display: flex;
 	justify-content: center;
-	@media screen and (max-width: 1000px) {
+	@media screen and (max-width: 900px) {
 		display: flex;
 		justify-content: center;
-		width: 600px;
+		width: 400px;
+	}
+	@media screen and (max-width: 400px) {
+		display: flex;
+		justify-content: center;
+		width: 100%;
 	}
 `;
 
 const Wrapper = styled.div`
-	width: 1000px;
+	width: 900px;
 	display: flex;
 	justify-content: space-between;
-	padding-top: 50px;
+	padding-top: 15px;
 
-	@media screen and (max-width: 1000px) {
+	@media screen and (max-width: 900px) {
 		display: flex;
 		justify-content: center;
 	}
@@ -56,7 +62,7 @@ const Container = styled.div`
 	width: 100%;
 	min-height: calc(100vh - 70px);
 	height: 100%;
-	background-color: lightgray;
+	background-color: #fafafa;
 	display: flex;
 	justify-content: center;
 	padding-top: 70px;
