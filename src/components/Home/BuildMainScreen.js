@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import pix from "./babe.jpeg";
 import { BsThreeDots, BsBookmark, BsFillBookmarkFill } from "react-icons/bs";
@@ -7,7 +7,28 @@ import { AiFillHome, AiOutlineHeart } from "react-icons/ai";
 import { FiSend } from "react-icons/fi";
 import { FaRegComment, FaRegSmileWink } from "react-icons/fa";
 
+import axios from "axios";
+import PersonalInfo from "./PersonalInfo";
+import ViewImage from "./ImageProfile";
+
 const BuildMainScreen = () => {
+	const [postData, setPostData] = useState([]);
+
+	const getPosts = async () => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${localURL}/api/post/posts`;
+
+		await axios.get(url).then((res) => {
+			setPostData(res.data.data);
+		});
+	};
+
+	useEffect(() => {
+		getPosts();
+	}, []);
+
 	return (
 		<Container>
 			<TopBuild>
@@ -17,60 +38,67 @@ const BuildMainScreen = () => {
 				</Holder>
 			</TopBuild>
 
-			<PostBuild>
-				<Top>
-					<Hold>
-						<ImageProfile src={pix} />
-						<ProfileHolder>
-							<ProfileName>name</ProfileName>
-							<Profile>Original</Profile>
-						</ProfileHolder>
-					</Hold>
+			{postData?.map((props) => (
+				<PostBuild key={props._id}>
+					<Top>
+						<Hold>
+							{/* <ImageProfile src={pix} /> */}
+							<ViewImage props={props} />
+							<ProfileHolder>
+								<ProfileName>
+									<PersonalInfo props={props} userInfo />
+								</ProfileName>
+								<Profile>
+									<PersonalInfo props={props} name />
+								</Profile>
+							</ProfileHolder>
+						</Hold>
 
-					<DotIcon />
-				</Top>
+						<DotIcon />
+					</Top>
 
-				<PostImage src={pix} />
+					<PostImage src={props.avatar} />
 
-				<Icons>
-					<Hold>
-						<LoveIcon />
-						<CommentIcon />
-						<SendIcon />
-					</Hold>
+					<Icons>
+						<Hold>
+							<LoveIcon />
+							<CommentIcon />
+							<SendIcon />
+						</Hold>
 
-					<SavedIcon />
-				</Icons>
-				<LikePost>
-					<span>{0}</span>likes{" "}
-				</LikePost>
+						<SavedIcon />
+					</Icons>
+					<LikePost>
+						<span>{0}</span>likes{" "}
+					</LikePost>
 
-				<Post>
-					<span>name</span>
-					<Content>What were takeaways from today's service?... </Content>
-				</Post>
-
-				<View>
-					View All <span>{0}</span> comments{" "}
-				</View>
-
-				<Comment>
-					<Hold>
+					<Post>
 						<span>name</span>
-						<Content>What were takeaways from today's service?... </Content>
-					</Hold>
+						<Content>{props.message} </Content>
+					</Post>
 
-					<LoveIconComment />
-				</Comment>
+					<View>
+						View All <span>{0}</span> comments{" "}
+					</View>
 
-				<Time>Posted 3Hours Ago</Time>
+					<Comment>
+						<Hold>
+							<span>name</span>
+							<Content>What were takeaways from today's service?... </Content>
+						</Hold>
 
-				<PostInput>
-					<PostIcon />
-					<Input placeholder="Add a commment..." />
-					<Text>Post</Text>
-				</PostInput>
-			</PostBuild>
+						<LoveIconComment />
+					</Comment>
+
+					<Time>Posted 3Hours Ago</Time>
+
+					<PostInput>
+						<PostIcon />
+						<Input placeholder="Add a commment..." />
+						<Text>Post</Text>
+					</PostInput>
+				</PostBuild>
+			))}
 		</Container>
 	);
 };

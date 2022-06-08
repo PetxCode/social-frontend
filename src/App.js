@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ConfirmEmailVerification from "./components/Auth/ConfirmEmailVerification";
 import NewPassword from "./components/Auth/NewPassword";
+import PrivatePage from "./components/Auth/PrivatePage";
 import Register from "./components/Auth/Register";
 import ResetPassword from "./components/Auth/ResetPassword";
 import SignIn from "./components/Auth/Signin";
@@ -15,9 +16,23 @@ const App = () => {
 		<BrowserRouter>
 			<Header />
 			<Routes>
-				<Route path="/" element={<HomeScreen />} />
+				<Route
+					path="/"
+					element={
+						<PrivatePage>
+							<HomeScreen />
+						</PrivatePage>
+					}
+				/>
 
-				<Route path="/post" element={<MakePost />} />
+				<Route
+					path="/post"
+					element={
+						<PrivatePage>
+							<MakePost />
+						</PrivatePage>
+					}
+				/>
 
 				<Route path="/detail" element={<DetailScreen />} />
 				<Route path="/register" element={<Register />} />

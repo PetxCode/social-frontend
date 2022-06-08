@@ -6,8 +6,15 @@ import { BiAddToQueue, BiUserCircle } from "react-icons/bi";
 import pix from "./babe.jpeg";
 import { Link, NavLink } from "react-router-dom";
 
+import { useSelector, useDispatch } from "react-redux";
+import { signOut } from "../Global/GlobalState";
+
+import Swal from "sweetalert2";
+
 const Header = () => {
-	const [auth, setAuth] = useState(false);
+	const dispatch = useDispatch();
+	const auth = useSelector((state) => state.signIn);
+
 	return (
 		<Container>
 			<Wrapper>
@@ -24,7 +31,18 @@ const Header = () => {
 							<HomeIcon />
 							<PostIcon />
 							<LoveIcon />
-							<Image src={pix} />
+							<Image
+								src={pix}
+								onClick={() => {
+									Swal.fire({
+										icon: "info",
+										title: `Are you sure?`,
+										text: "It pain us to see you go!",
+									}).then(() => {
+										dispatch(signOut());
+									});
+								}}
+							/>
 						</div>
 					) : (
 						<Nav to="/register">

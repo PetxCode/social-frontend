@@ -15,7 +15,12 @@ import axios from "axios";
 
 import Swal from "sweetalert2";
 
+import { useSelector, useDispatch } from "react-redux";
+import { createUser } from "../Global/GlobalState";
+
 const SignIn = () => {
+	const dispatch = useDispatch();
+
 	const yupSchema = yup.object().shape({
 		email: yup.string().email().required("This field should be filled"),
 		password: yup.string().required("This field should be filled"),
@@ -42,7 +47,7 @@ const SignIn = () => {
 		// const url = `http://localhost:3322/api/user/signin`;
 
 		await axios.post(url, { email, password }, config).then((res) => {
-			console.log(res.data.data);
+			dispatch(createUser(res.data.data));
 		});
 
 		Swal.fire({
