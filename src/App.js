@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ConfirmEmailVerification from "./components/Auth/ConfirmEmailVerification";
 import NewPassword from "./components/Auth/NewPassword";
 import Register from "./components/Auth/Register";
 import ResetPassword from "./components/Auth/ResetPassword";
@@ -19,6 +20,10 @@ const App = () => {
 				<Route path="/signin" element={<SignIn />} />
 				<Route path="/requestReset" element={<ResetPassword />} />
 				<Route path="/newPassword" element={<NewPassword />} />
+				<Route
+					path="/api/user/token/:id/:token"
+					element={<ConfirmEmailVerification />}
+				/>
 			</Routes>
 		</BrowserRouter>
 	);
