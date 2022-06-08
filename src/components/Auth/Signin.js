@@ -8,10 +8,54 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { MdPassword } from "react-icons/md";
 import { Link } from "react-router-dom";
 
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+
+import Swal from "sweetalert2";
+
 const SignIn = () => {
+	const yupSchema = yup.object().shape({
+		email: yup.string().email().required("This field should be filled"),
+		password: yup.string().required("This field should be filled"),
+	});
+
+	const {
+		handleSubmit,
+		reset,
+		register,
+		formState: { errors },
+	} = useForm({ resolver: yupResolver(yupSchema) });
+
+	const onSubmit = handleSubmit(async (val) => {
+		const { email, password } = val;
+
+		const config = {
+			"content-type": "application/json",
+		};
+
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${mainURL}/api/user/signin`;
+		// const url = `http://localhost:3322/api/user/signin`;
+
+		await axios.post(url, { email, password }, config).then((res) => {
+			console.log(res.data.data);
+		});
+
+		Swal.fire({
+			icon: "success",
+			title: `welcome back ${email}`,
+			text: "Good to see you again",
+			footer: '<a href="">This is developed by CodeLab Students: set05</a>',
+		});
+	});
+
 	return (
 		<Container>
-			<Wrapper>
+			<Wrapper onSubmit={onSubmit}>
 				<Logo>Social Build</Logo>
 
 				<Text>Sign up to see photos and videos from your friends.</Text>
@@ -29,15 +73,15 @@ const SignIn = () => {
 
 				<InputHolder>
 					<Icon1 />
-					<Input placeholder="Email" />
+					<Input placeholder="Email" {...register("email")} />
 				</InputHolder>
-
+				<Error>{errors?.email?.message}</Error>
 				<InputHolder>
 					<Icon4 />
-					<Input placeholder="Password" />
+					<Input placeholder="Password" {...register("password")} />
 				</InputHolder>
-
-				<Button1>
+				<Error>{errors?.password?.message}</Error>
+				<Button1 type="submit">
 					<Icon6 />
 					<span>Sign in</span>
 				</Button1>
@@ -53,6 +97,12 @@ const SignIn = () => {
 };
 
 export default SignIn;
+
+const Error = styled.div`
+	font-size: small;
+	color: red;
+`;
+
 const LinkedNow = styled(Link)`
 	display: flex;
 	font-size: 12px;
@@ -60,9 +110,12 @@ const LinkedNow = styled(Link)`
 	margin-bottom: 10px;
 	text-decoration: none;
 `;
-const Button1 = styled.div`
+const Button1 = styled.button`
+	outline: none;
+	border: 0;
+	font-size: 14px;
+	font-family: Poppins;
 	background-color: rgb(16, 143, 233);
-	/* width: 100%; */
 	color: white;
 	margin: 20px 0px;
 	padding: 7px 50px;
@@ -216,7 +269,7 @@ const Logo = styled.div`
 	margin-bottom: 10px;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.form`
 	width: 350px;
 	height: 100%;
 	min-height: 100px;

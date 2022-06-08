@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import pix from "./babe.jpeg";
 import styled from "styled-components";
 import { FaFacebookSquare, FaRegUserCircle } from "react-icons/fa";
@@ -8,10 +8,74 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { MdPassword } from "react-icons/md";
 import { Link } from "react-router-dom";
 
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+
+import Swal from "sweetalert2";
+
 const Register = () => {
+	const [image, setImage] = useState(pix);
+	const [avatar, setAvatar] = useState("");
+
+	const yupSchema = yup.object().shape({
+		fullName: yup.string().required("This field should be filled"),
+		userName: yup.string().required("This field should be filled"),
+		email: yup.string().email().required("This field should be filled"),
+		password: yup.string().required("This field should be filled"),
+		confirm: yup
+			.string()
+			.oneOf([yup.ref("password"), null], "Password, doesn't match"),
+	});
+
+	const handleImage = (e) => {
+		const file = e.target.files[0];
+		const save = URL.createObjectURL(file);
+		setImage(save);
+		setAvatar(file);
+	};
+
+	const {
+		handleSubmit,
+		reset,
+		register,
+		formState: { errors },
+	} = useForm({ resolver: yupResolver(yupSchema) });
+
+	const onSubmit = handleSubmit(async (val) => {
+		const { fullName, userName, email, password } = val;
+
+		const formData = new FormData();
+
+		formData.append("fullName", fullName);
+		formData.append("userName", userName);
+		formData.append("email", email);
+		formData.append("password", password);
+		formData.append("avatar", avatar);
+
+		const config = {
+			"content-type": "multipart/form-data",
+		};
+
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${localURL}/api/user/register`;
+
+		await axios.post(url, formData, config);
+
+		Swal.fire({
+			icon: "success",
+			title: "Verify your Account",
+			text: "Check your mail for complete registeration",
+			footer: '<a href="">This is developed by CodeLab Students: set05</a>',
+		});
+	});
+
 	return (
 		<Container>
-			<Wrapper>
+			<Wrapper onSubmit={onSubmit} type="content-type: multipart/form-data">
 				<Logo>Social Build</Logo>
 
 				<Text>Sign up to see photos and videos from your friends.</Text>
@@ -28,37 +92,37 @@ const Register = () => {
 				</LineHolder>
 
 				<ImageHold>
-					<Image src={pix} />
+					<Image src={image} />
 					<ImageLabel htmlFor="pix">Upload Image</ImageLabel>
-					<ImageInput id="pix" />
+					<ImageInput id="pix" onChange={handleImage} type="file" />
 				</ImageHold>
 
 				<InputHolder>
 					<Icon1 />
-					<Input placeholder="Email" />
+					<Input placeholder="Email" {...register("email")} />
 				</InputHolder>
-
+				<Error>{errors?.email?.message}</Error>
 				<InputHolder>
 					<Icon2 />
-					<Input placeholder="Full Name" />
+					<Input placeholder="Full Name" {...register("fullName")} />
 				</InputHolder>
-
+				<Error>{errors?.fullName?.message}</Error>
 				<InputHolder>
 					<Icon3 />
-					<Input placeholder="Username" />
+					<Input placeholder="Username" {...register("userName")} />
 				</InputHolder>
-
+				<Error>{errors?.userName?.message}</Error>
 				<InputHolder>
 					<Icon4 />
-					<Input placeholder="Password" />
+					<Input placeholder="Password" {...register("password")} />
 				</InputHolder>
-
+				<Error>{errors?.password?.message}</Error>
 				<InputHolder>
 					<Icon4 />
-					<Input placeholder="Confirm Password" />
+					<Input placeholder="Confirm Password" {...register("confirm")} />
 				</InputHolder>
-
-				<Button>
+				<Error>{errors?.confirm?.message}</Error>
+				<Button type="submit">
 					<Icon6 />
 					<span>Sign up</span>
 				</Button>
@@ -73,6 +137,11 @@ const Register = () => {
 };
 
 export default Register;
+
+const Error = styled.div`
+	font-size: small;
+	color: red;
+`;
 
 const Linked = styled.div`
 	display: flex;
@@ -104,6 +173,7 @@ const Input = styled.input`
 	flex: 1;
 	outline: none;
 	border: 0;
+	height: 90%;
 
 	::placeholder {
 		font-family: Poppins;
@@ -139,6 +209,7 @@ const ImageLabel = styled.label`
 	background-color: rgb(16, 143, 233);
 	color: white;
 	border-radius: 3px;
+	cursor: pointer;
 `;
 
 const Image = styled.img`
@@ -188,17 +259,20 @@ const Icon = styled(FaFacebookSquare)`
 	margin-right: 10px;
 `;
 
-const Button = styled.div`
+const Button = styled.button`
 	background-color: rgb(16, 143, 233);
+	outline: none;
 	/* width: 100%; */
 	color: white;
 	margin: 20px 0px;
-	padding: 7px 50px;
+	padding: 10px 50px;
 	border-radius: 3px;
 	display: flex;
 	align-items: center;
 	font-size: 14px;
 	cursor: pointer;
+	border: 0;
+	font-family: Poppins;
 `;
 
 const Text = styled.div`
@@ -217,7 +291,7 @@ const Logo = styled.div`
 	margin-bottom: 10px;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.form`
 	width: 350px;
 	height: 100%;
 	min-height: 100px;

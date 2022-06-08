@@ -19,7 +19,7 @@ const App = () => {
 				<Route path="/register" element={<Register />} />
 				<Route path="/signin" element={<SignIn />} />
 				<Route path="/requestReset" element={<ResetPassword />} />
-				<Route path="/newPassword" element={<NewPassword />} />
+				<Route path="/api/user/reset/:id/:token" element={<NewPassword />} />
 				<Route
 					path="/api/user/token/:id/:token"
 					element={<ConfirmEmailVerification />}

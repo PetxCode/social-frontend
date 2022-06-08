@@ -6,12 +6,62 @@ import { AiOutlineMail } from "react-icons/ai";
 import { GiPadlock } from "react-icons/gi";
 import { BsFillPersonFill } from "react-icons/bs";
 import { MdPassword } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
+
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+
+import Swal from "sweetalert2";
 
 const NewPassword = () => {
+	const navigate = useNavigate();
+	const { id, token } = useParams();
+	const yupSchema = yup.object().shape({
+		password: yup.string().required("This field should be filled"),
+		confirm: yup
+			.string()
+			.oneOf([yup.ref("password"), null], "Password, doesn't match"),
+	});
+
+	const {
+		handleSubmit,
+		reset,
+		register,
+		formState: { errors },
+	} = useForm({ resolver: yupResolver(yupSchema) });
+
+	const onSubmit = handleSubmit(async (val) => {
+		console.log("Click2");
+		const { password } = val;
+
+		const config = {
+			"content-type": "application/json",
+		};
+
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${mainURL}/api/user/reset/${id}/${token}`;
+
+		await axios.patch(url, { password }).then((res) => {
+			console.log(res.data.data);
+		});
+
+		Swal.fire({
+			icon: "success",
+			title: "CHeck your mail for reset Link",
+			text: "Check your mail for complete password reset",
+			footer: '<a href="">This is developed by CodeLab Students: set05</a>',
+		}).then(() => {
+			navigate("/signin");
+		});
+	});
+
 	return (
 		<Container>
-			<Wrapper>
+			<Wrapper onSubmit={onSubmit}>
 				<Logo>Social Build</Logo>
 
 				<Text>Sign up to see photos and videos from your friends.</Text>
@@ -29,15 +79,22 @@ const NewPassword = () => {
 
 				<InputHolder>
 					<Icon1 />
-					<Input placeholder="Password" />
+					<Input placeholder="Password" {...register("password")} />
 				</InputHolder>
+				<Error>{errors?.password?.message}</Error>
 
 				<InputHolder>
 					<Icon1 />
-					<Input placeholder="Confirm Password" />
+					<Input placeholder="Confirm Password" {...register("confirm")} />
 				</InputHolder>
+				<Error>{errors?.confirm?.message}</Error>
 
-				<Button1>
+				<Button1
+					type="submit"
+					onClick={() => {
+						console.log("Click");
+					}}
+				>
 					<Icon6 />
 					<span>Password Reset</span>
 				</Button1>
@@ -53,7 +110,16 @@ const NewPassword = () => {
 
 export default NewPassword;
 
-const Button1 = styled.div`
+const Error = styled.div`
+	font-size: small;
+	color: red;
+`;
+
+const Button1 = styled.button`
+	outline: none;
+	border: 0;
+	font-family: Poppins;
+	font-size: 14px;
 	background-color: rgb(16, 143, 233);
 	/* width: 100%; */
 	color: white;
@@ -209,7 +275,7 @@ const Logo = styled.div`
 	margin-bottom: 10px;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.form`
 	width: 350px;
 	height: 100%;
 	min-height: 100px;

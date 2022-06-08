@@ -1,25 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { BsSearch } from "react-icons/bs";
 import { AiFillHome, AiOutlineHeart } from "react-icons/ai";
-import { BiAddToQueue } from "react-icons/bi";
+import { BiAddToQueue, BiUserCircle } from "react-icons/bi";
 import pix from "./babe.jpeg";
+import { Link, NavLink } from "react-router-dom";
+
 const Header = () => {
+	const [auth, setAuth] = useState(false);
 	return (
 		<Container>
 			<Wrapper>
 				<Hold>
-					<Logo>Social Build</Logo>
+					<Logo to="/">Social Build</Logo>
 					<SearchBar>
 						<Icon />
 						<SearchInput placeholder="search" />
 					</SearchBar>
 				</Hold>
 				<Hold>
-					<HomeIcon />
-					<PostIcon />
-					<LoveIcon />
-					<Image src={pix} />
+					{auth ? (
+						<div>
+							<HomeIcon />
+							<PostIcon />
+							<LoveIcon />
+							<Image src={pix} />
+						</div>
+					) : (
+						<Nav to="/register">
+							<Icons />
+							<span>Register</span>
+						</Nav>
+					)}
 				</Hold>
 			</Wrapper>
 		</Container>
@@ -27,7 +39,20 @@ const Header = () => {
 };
 
 export default Header;
-// const SearchBarIcon = styled.div``;
+
+const Icons = styled(BiUserCircle)`
+	font-size: 30px;
+`;
+
+const Nav = styled(NavLink)`
+	text-transform: uppercase;
+	font-size: 13px;
+	font-weight: 900;
+	text-decoration: none;
+	color: black;
+	display: flex;
+	align-items: center;
+`;
 
 const Image = styled.img`
 	width: 30px;
@@ -93,13 +118,15 @@ const SearchBar = styled.div`
 	}
 `;
 
-const Logo = styled.div`
+const Logo = styled(Link)`
+	color: black;
 	margin-right: 40px;
 	font-weight: 500;
 	font-size: 25px;
 	font-style: italic;
 	font-family: Pacifico;
 	line-height: 1;
+	text-decoration: none;
 	@media screen and (max-width: 768px) {
 		margin-right: 20px;
 	}
