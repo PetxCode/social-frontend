@@ -1,12 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import pix from "./babe.jpeg";
 
 import { BsGrid3X3, BsBookmark, BsPersonBoundingBox } from "react-icons/bs";
 import { FiSettings } from "react-icons/fi";
 import { MdSlowMotionVideo } from "react-icons/md";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const DetailScreen = () => {
+	const { id } = useParams();
+	const userID = useSelector((state) => state.signIn);
+
+	const [data, setData] = useState({});
+	const [mainUser, setMainUser] = useState({});
+	const [mainPost, setMainPost] = useState([]);
+
+	const getUserFromPost = async () => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${localURL}/api/post/${id}`;
+		const url2 = `http://localhost:3322/api/post/62a0d6267709bdfcda71bf29`;
+		await axios.get(url).then((res) => {
+			setData(res.data.data);
+		});
+	};
+
+	const getUser = async () => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${localURL}/api/user/${data.user}/user`;
+		await axios.get(url).then((res) => {
+			setMainUser(res.data.data);
+		});
+	};
+
+	const getPost = async () => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${localURL}/api/post/${data.user}/${id}`;
+		await axios.get(url).then((res) => {
+			setMainPost(res.data.data);
+		});
+	};
+
+	useEffect(() => {
+		getUserFromPost();
+		getUser();
+		// getPost();
+		console.log(mainUser);
+	}, [data]);
+
 	const [post, setPost] = useState(true);
 	const [video, setVideo] = useState(false);
 	const [save, setSave] = useState(false);
@@ -16,31 +64,37 @@ const DetailScreen = () => {
 		<Container>
 			<Wrapper>
 				<Top>
-					<Image src={pix} />
+					<Image src={mainUser.avatar} />
 					<Contents>
 						<NameDetails>
-							<ProfileName>Peter_Oti</ProfileName>
-							<EditButton>Edit Profile</EditButton>
+							<ProfileName>{mainUser.userName}</ProfileName>
+							<Space />
+							{userID._id === mainUser._id ? (
+								<EditButton to={`/update/${mainUser._id}`}>
+									Edit Profile
+								</EditButton>
+							) : null}
+
 							<Icon />
 						</NameDetails>
 
 						<NameDetails>
 							<Post>
-								<Count>{0}</Count>
+								<Count>{mainUser?.post?.length}</Count>
 								<Title>Posts</Title>
 							</Post>
 							<Post>
-								<Count>{0}</Count>
+								<Count>{mainUser?.follower?.length}</Count>
 								<Title>Followers</Title>
 							</Post>
 							<Post>
-								<Count>{0}</Count>
+								<Count>{mainUser?.following?.length}</Count>
 								<Title>Following</Title>
 							</Post>
 						</NameDetails>
 
 						<Detail>
-							<Name>Peter Oti</Name>
+							<Name>{mainUser.fullName}</Name>
 							<Bio>
 								Cinematographer, Post production, Tech entrepreneur, public
 								speaker and a serial entrepreneur.
@@ -108,12 +162,31 @@ const DetailScreen = () => {
 						</Title>
 					</NavHolder>
 				</Nav>
-
-				<PostImages>
-					<ImagePost src={pix} />
-					<ImagePost src={pix} />
-					<ImagePost src={pix} />
-				</PostImages>
+				{post ? (
+					<PostImages>
+						{mainUser?.post?.map((props) => (
+							<ImagePost src={props.avatar} key={props._id} />
+						))}
+					</PostImages>
+				) : video ? (
+					<PostImages>
+						{mainUser?.video?.map((props) => (
+							<ImagePost src={props.avatar} key={props._id} />
+						))}
+					</PostImages>
+				) : save ? (
+					<PostImages>
+						{mainUser?.save?.map((props) => (
+							<ImagePost src={props.avatar} key={props._id} />
+						))}
+					</PostImages>
+				) : tag ? (
+					<PostImages>
+						{mainUser?.tag?.map((props) => (
+							<ImagePost src={props.avatar} key={props._id} />
+						))}
+					</PostImages>
+				) : null}
 			</Wrapper>
 		</Container>
 	);
@@ -122,14 +195,19 @@ const DetailScreen = () => {
 export default DetailScreen;
 
 const ImagePost = styled.img`
-	width: 250px;
-	height: 250px;
+	width: 245px;
+	height: 245px;
 	object-fit: cover;
+	margin: 5px;
+`;
+
+const Space = styled.div`
+	flex: 1;
 `;
 
 const PostImages = styled.div`
 	width: 100%;
-	justify-content: space-between;
+	justify-content: center;
 	flex-wrap: wrap;
 	display: flex;
 `;
@@ -221,7 +299,9 @@ const Icon = styled(FiSettings)`
 	}
 `;
 
-const EditButton = styled.div`
+const EditButton = styled(Link)`
+	color: black;
+	text-decoration: none;
 	padding: 10px 20px;
 	box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
 		rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;

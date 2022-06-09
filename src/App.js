@@ -10,6 +10,7 @@ import Header from "./components/Header/Header";
 import HomeScreen from "./components/Home/HomeScreen";
 import MakePost from "./components/Post/MakePost";
 import DetailScreen from "./components/Profile/DetailScreen";
+import UpdateProfile from "./components/Profile/EditProfile";
 
 const App = () => {
 	return (
@@ -34,7 +35,24 @@ const App = () => {
 					}
 				/>
 
-				<Route path="/detail" element={<DetailScreen />} />
+				<Route
+					path="/update/:id"
+					element={
+						<PrivatePage>
+							<UpdateProfile />
+						</PrivatePage>
+					}
+				/>
+
+				<Route
+					path="/detail/:id"
+					element={
+						<PrivatePage>
+							<DetailScreen />
+						</PrivatePage>
+					}
+				/>
+
 				<Route path="/register" element={<Register />} />
 				<Route path="/signin" element={<SignIn />} />
 				<Route path="/requestReset" element={<ResetPassword />} />

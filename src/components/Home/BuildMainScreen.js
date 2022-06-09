@@ -10,9 +10,20 @@ import { FaRegComment, FaRegSmileWink } from "react-icons/fa";
 import axios from "axios";
 import PersonalInfo from "./PersonalInfo";
 import ViewImage from "./ImageProfile";
+import CommentCOmp from "./CommentCOmp";
+import { useSelector } from "react-redux";
+import LikeComp from "./LikeComp";
+
+import moment from "moment";
+import { Link } from "react-router-dom";
+import DisplayCard from "./DisplayCard";
 
 const BuildMainScreen = () => {
 	const [postData, setPostData] = useState([]);
+
+	const user = useSelector((state) => state.signIn);
+
+	const [display, setDisplay] = useState(false);
 
 	const getPosts = async () => {
 		const localURL = "http://localhost:3322";
@@ -27,6 +38,7 @@ const BuildMainScreen = () => {
 
 	useEffect(() => {
 		getPosts();
+		console.log(postData[0].user, user._id);
 	}, []);
 
 	return (
@@ -38,72 +50,108 @@ const BuildMainScreen = () => {
 				</Holder>
 			</TopBuild>
 
-			{postData?.map((props) => (
-				<PostBuild key={props._id}>
-					<Top>
-						<Hold>
-							{/* <ImageProfile src={pix} /> */}
-							<ViewImage props={props} />
-							<ProfileHolder>
-								<ProfileName>
+			<div>
+				{postData?.map((props) => (
+					<PostBuild key={props._id}>
+						<Top>
+							<Hold>
+								{/* <ImageProfile src={pix} /> */}
+								<ViewImage props={props} />
+								<ProfileHolder>
+									<ProfileName
+										onMouseEnter={() => {
+											setDisplay(true);
+										}}
+										onMouseLeave={() => {
+											setDisplay(false);
+										}}
+									>
+										<PersonalInfo props={props} userInfo />
+										{display ? (
+											<Div2>
+												<DisplayCard setDisplay={setDisplay} props={props} />
+											</Div2>
+										) : null}
+									</ProfileName>
+									<Profile>
+										<PersonalInfo props={props} name />
+									</Profile>
+								</ProfileHolder>
+							</Hold>
+
+							<DotIcon />
+						</Top>
+
+						<PostImage src={props.avatar} />
+
+						<Icons>
+							<Hold>
+								<LikeComp props={props} />
+								<CommentIcon />
+								<SendIcon />
+							</Hold>
+
+							<SavedIcon />
+						</Icons>
+						<LikePost>
+							<span>{props?.like.length}</span>likes{" "}
+						</LikePost>
+
+						<Post>
+							<Super to={`/detail/${props._id}`}>
+								<span>
 									<PersonalInfo props={props} userInfo />
-								</ProfileName>
-								<Profile>
-									<PersonalInfo props={props} name />
-								</Profile>
-							</ProfileHolder>
-						</Hold>
+								</span>
+							</Super>
 
-						<DotIcon />
-					</Top>
+							{props.message}
+						</Post>
 
-					<PostImage src={props.avatar} />
+						<View>
+							View All <span>{0}</span> comments{" "}
+						</View>
 
-					<Icons>
-						<Hold>
-							<LoveIcon />
-							<CommentIcon />
-							<SendIcon />
-						</Hold>
+						<Comment>
+							<Hold>
+								{/* <span>name</span>
+				<Content>What were takeaways from today's service?... </Content> */}
+								<CommentCOmp props={props} comm />
+							</Hold>
 
-						<SavedIcon />
-					</Icons>
-					<LikePost>
-						<span>{0}</span>likes{" "}
-					</LikePost>
+							{/* <LoveIconComment /> */}
+						</Comment>
 
-					<Post>
-						<span>name</span>
-						<Content>{props.message} </Content>
-					</Post>
+						<Time> Posted {moment(props.createdAt).fromNow()}</Time>
 
-					<View>
-						View All <span>{0}</span> comments{" "}
-					</View>
-
-					<Comment>
-						<Hold>
-							<span>name</span>
-							<Content>What were takeaways from today's service?... </Content>
-						</Hold>
-
-						<LoveIconComment />
-					</Comment>
-
-					<Time>Posted 3Hours Ago</Time>
-
-					<PostInput>
-						<PostIcon />
-						<Input placeholder="Add a commment..." />
-						<Text>Post</Text>
-					</PostInput>
-				</PostBuild>
-			))}
+						<PostInput>
+							<PostIcon />
+							<Input placeholder="Add a commment..." />
+							<Text>Post</Text>
+						</PostInput>
+					</PostBuild>
+				))}
+			</div>
 		</Container>
 	);
 };
 
 export default BuildMainScreen;
+
+const Span = styled.div`
+	position: relative;
+	font-weight: 700;
+	z-index: 200;
+`;
+
+const Div2 = styled.div`
+	position: absolute;
+	top: -3px;
+`;
+
+const Super = styled(Link)`
+	text-decoration: none;
+	color: black;
+`;
 
 const Comment = styled.div`
 	margin-left: 20px;
@@ -178,8 +226,9 @@ const Time = styled.div`
 
 const Post = styled.div`
 	margin: 0 20px;
-	display: flex;
+	/* display: flex; */
 	font-size: 15px;
+	width: 95%;
 	span {
 		margin-right: 5px;
 		font-weight: 500;
@@ -282,11 +331,14 @@ const Profile = styled.div`
 const Hold = styled.div`
 	display: flex;
 	font-size: 12px;
+	width: 100%;
 `;
 
 const ProfileName = styled.div`
 	font-weight: 700;
 	font-size: 12px;
+	position: relative;
+	cursor: pointer;
 `;
 
 const ProfileHolder = styled.div`

@@ -1,8 +1,51 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import pix from "./babe.jpeg";
 
-const DisplayCard = ({ setDisplay }) => {
+const DisplayCard = ({ setDisplay, props }) => {
+	const [postData, setPostData] = useState([]);
+	const [userData, setUserData] = useState([]);
+
+	const myUser = useSelector((state) => state.signIn);
+
+	const getPostData = async () => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+		const url2 = "http://localhost:3322/api/post/62a0d6267709bdfcda71bf29";
+
+		const url = `${localURL}/api/post/${props._id}`;
+		await axios.get(url).then((res) => {
+			setPostData(res.data.data);
+			console.log(postData);
+		});
+	};
+
+	const getUserData = async () => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${localURL}/api/user/${postData.user}/user`;
+		await axios.get(url).then((res) => {
+			setUserData(res.data.data);
+			// console.log(userData);
+		});
+	};
+
+	const getFollowData = async () => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${localURL}/api/follow}`;
+		await axios.post(url, { follower: myUser._id, following: postData.user });
+		console.log(myUser._id, postData.user);
+	};
+
+	useEffect(() => {
+		getPostData();
+		getUserData();
+	}, [postData]);
 	return (
 		<Container
 			onMouseEnter={() => {
@@ -14,10 +57,10 @@ const DisplayCard = ({ setDisplay }) => {
 		>
 			<Wrapper>
 				<Top>
-					<Image src={pix} />
+					<Image src={userData.avatar} />
 					<Holder>
-						<Name>name</Name>
-						<RealName>real name</RealName>
+						<Name>{userData.userName}</Name>
+						<RealName>{userData.fullName}</RealName>
 
 						<Follow>
 							Followed by <span>Another Name</span>
@@ -27,25 +70,47 @@ const DisplayCard = ({ setDisplay }) => {
 
 				<Middle>
 					<CountHolder>
-						<Count>{0}</Count>
+						<Count>{userData?.post?.length}</Count>
 						<Title>Post</Title>
 					</CountHolder>
 					<CountHolder>
-						<Count>{0}</Count>
-						<Title>followers</Title>
+						<Count>{userData?.follower?.length}</Count>
+						<Title>follower</Title>
 					</CountHolder>
 					<CountHolder>
-						<Count>{0}</Count>
+						<Count>{userData?.following?.length}</Count>
 						<Title>following</Title>
 					</CountHolder>
 				</Middle>
 
 				<Bottom>
-					<Images src={pix} />
-					<Images src={pix} />
-					<Images src={pix} />
+					{userData?.post?.map((props) => (
+						<Images src={props.avatar} key={props.user} />
+					))}
 				</Bottom>
-				<Botton>Follow</Botton>
+				{myUser._id === postData.user ? null : (
+					<Botton
+						onClick={() => {
+							getFollowData();
+							console.log("Hello:", props._id);
+
+							console.log(myUser._id, postData.user);
+						}}
+					>
+						Follow
+					</Botton>
+				)}
+
+				{/* <Botton
+					onClick={() => {
+						getFollowData();
+						console.log("Hello:", props._id);
+
+						console.log(myUser._id, postData.user);
+					}}
+				>
+					Follow
+				</Botton> */}
 			</Wrapper>
 		</Container>
 	);
@@ -75,6 +140,7 @@ const Images = styled.img`
 	width: 116px;
 	height: 116px;
 	object-fit: cover;
+	margin: 3px;
 
 	:hover {
 		opacity: 0.9;
@@ -85,6 +151,7 @@ const Bottom = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: center;
+	flex-wrap: wrap;
 `;
 
 const Title = styled.div`
@@ -122,9 +189,10 @@ const Image = styled.img`
 `;
 
 const RealName = styled.div`
-	font-size: 13px;
-	margin-bottom: 15px;
+	font-size: 12px;
+	margin-bottom: 10px;
 	color: gray;
+	margin-top: 5px;
 `;
 
 const Name = styled.div`

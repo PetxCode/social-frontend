@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
-const PersonalInfo = ({ props, userInfo, name, myImage }) => {
-	const id = props.user;
+const CommentProfile = ({ props, userInfo, name, myImage }) => {
+	const id = props.posted;
 
 	const [user, setUser] = useState({});
 
@@ -22,14 +22,39 @@ const PersonalInfo = ({ props, userInfo, name, myImage }) => {
 	}, []);
 
 	return (
-		<div srtle={{ display: "flex" }}>
-			<div>{userInfo ? user?.userName : null}</div>
-			<div>{name ? user?.fullName : null}</div>
+		<div>
+			<Div>{userInfo ? user?.userName : null}</Div>
+			<Div>{name ? user?.fullName : null}</Div>
 		</div>
 	);
 };
 
-export default PersonalInfo;
+export default CommentProfile;
+
+const Div = styled.div`
+	font-weight: 700;
+	margin-right: 5px;
+	position: relative;
+
+	:after {
+		content: "";
+		height: 2px;
+		background-color: purple;
+		width: 100%;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		transition: all 350ms;
+		opacity: 0;
+	}
+
+	:hover {
+		cursor: pointer;
+		:after {
+			opacity: 1;
+		}
+	}
+`;
 
 const ImageProfile = styled.img`
 	width: 35px;
