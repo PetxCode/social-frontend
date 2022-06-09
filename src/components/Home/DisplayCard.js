@@ -1,24 +1,26 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { singlePostState, singleUserState } from "../Global/GlobalState";
 import pix from "./babe.jpeg";
 
 const DisplayCard = ({ setDisplay, props }) => {
 	const [postData, setPostData] = useState([]);
 	const [userData, setUserData] = useState([]);
 
+	const dispatch = useDispatch();
 	const myUser = useSelector((state) => state.signIn);
+	const singlePost = useSelector((state) => state.singlePost);
+	const singleUser = useSelector((state) => state.singleUser);
 
 	const getPostData = async () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
-		const url2 = "http://localhost:3322/api/post/62a0d6267709bdfcda71bf29";
 
 		const url = `${localURL}/api/post/${props._id}`;
 		await axios.get(url).then((res) => {
-			setPostData(res.data.data);
-			console.log(postData);
+			dispatch(singlePostState(res.data.data));
 		});
 	};
 
@@ -26,10 +28,9 @@ const DisplayCard = ({ setDisplay, props }) => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/user/${postData.user}/user`;
+		const url = `${localURL}/api/user/${singlePost.user}/user`;
 		await axios.get(url).then((res) => {
-			setUserData(res.data.data);
-			// console.log(userData);
+			dispatch(singleUserState(res.data.data));
 		});
 	};
 
@@ -42,10 +43,19 @@ const DisplayCard = ({ setDisplay, props }) => {
 		console.log(myUser._id, postData.user);
 	};
 
+	const getFollowDataNow = async () => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${localURL}/api/follow/${myUser._id}/${singlePost.user}}`;
+		const url2 = `http://localhost:3322/api/follow/${myUser._id}/62a0aa14afccb89e74e61f2f`;
+		await axios.patch(url2);
+	};
+
 	useEffect(() => {
 		getPostData();
 		getUserData();
-	}, [postData]);
+	}, []);
 	return (
 		<Container
 			onMouseEnter={() => {
@@ -57,10 +67,10 @@ const DisplayCard = ({ setDisplay, props }) => {
 		>
 			<Wrapper>
 				<Top>
-					<Image src={userData.avatar} />
+					<Image src={singleUser.avatar} />
 					<Holder>
-						<Name>{userData.userName}</Name>
-						<RealName>{userData.fullName}</RealName>
+						<Name>{singleUser.userName}</Name>
+						<RealName>{singleUser.fullName}</RealName>
 
 						<Follow>
 							Followed by <span>Another Name</span>
@@ -70,31 +80,29 @@ const DisplayCard = ({ setDisplay, props }) => {
 
 				<Middle>
 					<CountHolder>
-						<Count>{userData?.post?.length}</Count>
+						<Count>{singleUser?.post?.length}</Count>
 						<Title>Post</Title>
 					</CountHolder>
 					<CountHolder>
-						<Count>{userData?.follower?.length}</Count>
+						<Count>{singleUser?.follower?.length}</Count>
 						<Title>follower</Title>
 					</CountHolder>
 					<CountHolder>
-						<Count>{userData?.following?.length}</Count>
+						<Count>{singleUser?.following?.length}</Count>
 						<Title>following</Title>
 					</CountHolder>
 				</Middle>
 
 				<Bottom>
-					{userData?.post?.map((props) => (
+					{singleUser?.post?.map((props) => (
 						<Images src={props.avatar} key={props.user} />
 					))}
 				</Bottom>
-				{myUser._id === postData.user ? null : (
+				{myUser._id === singlePost.user ? null : (
 					<Botton
 						onClick={() => {
-							getFollowData();
-							console.log("Hello:", props._id);
-
-							console.log(myUser._id, postData.user);
+							getFollowDataNow();
+							console.log("Hello:", myUser._id, singlePost.user);
 						}}
 					>
 						Follow

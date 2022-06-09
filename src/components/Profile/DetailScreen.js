@@ -48,12 +48,23 @@ const DetailScreen = () => {
 		});
 	};
 
+	const getFollowDataNow = async () => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${localURL}/api/follow/${userID._id}/${mainUser._id}}`;
+		await axios.patch(url).then((res) => {
+			console.log(res.data.message);
+			console.log("Done");
+		});
+	};
+	console.log(userID._id, data.user);
 	useEffect(() => {
-		getUserFromPost();
+		// getUserFromPost();
 		getUser();
 		// getPost();
 		console.log(mainUser);
-	}, [data]);
+	}, []);
 
 	const [post, setPost] = useState(true);
 	const [video, setVideo] = useState(false);
@@ -73,7 +84,16 @@ const DetailScreen = () => {
 								<EditButton to={`/update/${mainUser._id}`}>
 									Edit Profile
 								</EditButton>
-							) : null}
+							) : (
+								<Botton
+									onClick={() => {
+										getFollowDataNow();
+										console.log("Done: ", userID._id, mainUser._id);
+									}}
+								>
+									Follow
+								</Botton>
+							)}
 
 							<Icon />
 						</NameDetails>
@@ -193,6 +213,25 @@ const DetailScreen = () => {
 };
 
 export default DetailScreen;
+
+const Botton = styled.div`
+	margin: 10px;
+	background-color: rgb(16, 143, 233);
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 15px;
+	font-weight: 500;
+	color: white;
+	border-radius: 3px;
+	transition: all 350ms;
+	padding: 5px 40px;
+	:hover {
+		cursor: pointer;
+		background-color: rgba(16, 143, 233, 0.8);
+	}
+`;
 
 const ImagePost = styled.img`
 	width: 245px;

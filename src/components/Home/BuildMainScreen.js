@@ -11,17 +11,20 @@ import axios from "axios";
 import PersonalInfo from "./PersonalInfo";
 import ViewImage from "./ImageProfile";
 import CommentCOmp from "./CommentCOmp";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import LikeComp from "./LikeComp";
 
 import moment from "moment";
 import { Link } from "react-router-dom";
 import DisplayCard from "./DisplayCard";
+import { postState } from "../Global/GlobalState";
 
 const BuildMainScreen = () => {
 	const [postData, setPostData] = useState([]);
 
+	const dispatch = useDispatch();
 	const user = useSelector((state) => state.signIn);
+	const post = useSelector((state) => state.post);
 
 	const [display, setDisplay] = useState(false);
 
@@ -32,13 +35,12 @@ const BuildMainScreen = () => {
 		const url = `${localURL}/api/post/posts`;
 
 		await axios.get(url).then((res) => {
-			setPostData(res.data.data);
+			dispatch(postState(res.data.data));
 		});
 	};
 
 	useEffect(() => {
 		getPosts();
-		console.log(postData[0].user, user._id);
 	}, []);
 
 	return (
@@ -51,7 +53,7 @@ const BuildMainScreen = () => {
 			</TopBuild>
 
 			<div>
-				{postData?.map((props) => (
+				{post?.map((props) => (
 					<PostBuild key={props._id}>
 						<Top>
 							<Hold>
