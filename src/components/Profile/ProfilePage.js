@@ -10,11 +10,10 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { singlePostState } from "../Global/GlobalState";
 
-const DetailScreen = () => {
+const ProfilePage = () => {
 	const { id } = useParams();
 
 	const userID = useSelector((state) => state.signIn);
-	const singlePost = useSelector((state) => state.singlePost);
 
 	const dispatch = useDispatch();
 
@@ -23,15 +22,15 @@ const DetailScreen = () => {
 	const [readUser, setReadUser] = useState({});
 	const [mainPost, setMainPost] = useState([]);
 
-	const getUser = async () => {
-		const localURL = "http://localhost:3322";
-		const mainURL = "https://social-backend22.herokuapp.com";
+	// const getUser = async () => {
+	// 	const localURL = "http://localhost:3322";
+	// 	const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/user/${singlePost.user}/user`;
-		await axios.get(url).then((res) => {
-			setMainUser(res.data.data);
-		});
-	};
+	// 	const url = `${localURL}/api/user/${singlePost.user}/user`;
+	// 	await axios.get(url).then((res) => {
+	// 		setMainUser(res.data.data);
+	// 	});
+	// };
 
 	const getPost = async () => {
 		const localURL = "http://localhost:3322";
@@ -58,51 +57,22 @@ const DetailScreen = () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/post/${id}`;
+		const url = `${localURL}/api/post/${userID._id}/post`;
 
 		await axios.get(url).then((res) => {
-			dispatch(singlePostState(res.data.data));
 			setData(res.data.data);
+			console.log("myPost Data: ", res.data.data);
 		});
 	};
 
-	const getFollowDataNow = async () => {
-		const localURL = "http://localhost:3322";
-		const mainURL = "https://social-backend22.herokuapp.com";
-
-		const workingURL =
-			"http://localhost:3322/api/follow/62a0b996cb9704a9e4a81a1c/62a0aa14afccb89e74e61f2f";
-
-		const mainURL2 = `http://localhost:3322/api/follow/${userID._id}/${singlePost.user}`;
-
-		const url = `${localURL}/api/follow/${singlePost.user}/${userID._id}}`;
-
-		await axios.patch(mainURL2).then((res) => {
-			console.log(`You are now following ${userID.fullName}...!`);
-		});
-	};
-
-	const deleteFollowDataNow = async () => {
-		const localURL = "http://localhost:3322";
-		const mainURL = "https://social-backend22.herokuapp.com";
-
-		const workingURL =
-			"http://localhost:3322/api/follow/62a0b996cb9704a9e4a81a1c/62a0aa14afccb89e74e61f2f";
-
-		const mainURL2 = `http://localhost:3322/api/follow/${userID._id}/${singlePost.user}`;
-
-		const url = `${localURL}/api/follow/${singlePost.user}/${userID._id}}`;
-
-		await axios.delete(mainURL2).then((res) => {
-			console.log(`You are no more following ${userID.fullName}...!`);
-		});
-	};
+	console.log("post: ", data);
 
 	useEffect(
 		() => {
 			getUserFromPost();
-			getUser();
+			// getUser();
 			getUserData();
+			// getPost();
 		},
 		[
 			// id, postData
@@ -118,76 +88,36 @@ const DetailScreen = () => {
 		<Container>
 			<Wrapper>
 				<Top>
-					<Image src={mainUser.avatar} />
+					<Image src={readUser.avatar} />
 					<Contents>
 						<NameDetails>
-							<ProfileName>{mainUser.userName}</ProfileName>
+							<ProfileName>{readUser.userName}</ProfileName>
 							<Space />
-							{userID._id === mainUser._id ? (
-								<EditButton to={`/update/${mainUser._id}`}>
-									Edit Profile
-								</EditButton>
-							) : (
-								<div>
-									{userID?.following?.includes(singlePost.user) ? (
-										<Botton
-											onClick={() => {
-												deleteFollowDataNow();
-												console.log("Done: ", userID._id, mainUser._id);
-											}}
-										>
-											Unfollow
-										</Botton>
-									) : (
-										// <Botton
-										// 	onClick={() => {
-										// 		getFollowDataNow();
-										// 		console.log("Done: ", userID._id, mainUser._id);
-										// 	}}
-										// >
-										// 	Follow
-										// </Botton>
-										// <Botton
-										// 	onClick={() => {
-										// 		deleteFollowDataNow();
-										// 		console.log("Done: ", userID._id, mainUser._id);
-										// 	}}
-										// >
-										// 	Unfollow
-										// </Botton>
-										<Botton
-											onClick={() => {
-												getFollowDataNow();
-												console.log("Done start: ", userID._id, mainUser._id);
-											}}
-										>
-											Follow
-										</Botton>
-									)}
-								</div>
-							)}
+
+							<EditButton to={`/update/${userID._id}`}>Edit Profile</EditButton>
 
 							<Icon />
 						</NameDetails>
 
 						<NameDetails>
 							<Post>
-								<Count>{mainUser?.post?.length}</Count>
+								<Count>{readUser?.post?.length}</Count>
 								<Title>Posts</Title>
 							</Post>
 							<Post>
-								<Count>{mainUser?.follower?.length}</Count>
+								<Count>{readUser?.follower?.length}</Count>
 								<Title>Followers</Title>
 							</Post>
 							<Post>
-								<Count>{mainUser?.following?.length}</Count>
+								<Count>{readUser?.following?.length}</Count>
 								<Title>Following</Title>
 							</Post>
 						</NameDetails>
 
 						<Detail>
-							<Name>{mainUser.fullName}</Name>
+							<Name>{readUser.fullName}</Name>
 							<Bio>
+								{readUser.bio}
 								Cinematographer, Post production, Tech entrepreneur, public
 								speaker and a serial entrepreneur.
 							</Bio>
@@ -256,25 +186,25 @@ const DetailScreen = () => {
 				</Nav>
 				{post ? (
 					<PostImages>
-						{mainUser?.post?.map((props) => (
+						{data?.post?.map((props) => (
 							<ImagePost src={props.avatar} key={props._id} />
 						))}
 					</PostImages>
 				) : video ? (
 					<PostImages>
-						{mainUser?.video?.map((props) => (
+						{data?.video?.map((props) => (
 							<ImagePost src={props.avatar} key={props._id} />
 						))}
 					</PostImages>
 				) : save ? (
 					<PostImages>
-						{mainUser?.save?.map((props) => (
+						{data?.save?.map((props) => (
 							<ImagePost src={props.avatar} key={props._id} />
 						))}
 					</PostImages>
 				) : tag ? (
 					<PostImages>
-						{mainUser?.tag?.map((props) => (
+						{data?.tag?.map((props) => (
 							<ImagePost src={props.avatar} key={props._id} />
 						))}
 					</PostImages>
@@ -284,7 +214,7 @@ const DetailScreen = () => {
 	);
 };
 
-export default DetailScreen;
+export default ProfilePage;
 
 const Botton = styled.div`
 	margin: 10px;

@@ -14,14 +14,14 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 
 const UpdateProfile = () => {
-	const { id } = useParams();
+	const userID = useSelector((state) => state.signIn);
+
 	const naviagte = useNavigate();
 	const [image, setImage] = useState(pix);
 	const [avatar, setAvatar] = useState("");
-
-	console.log(id);
 
 	const yupSchema = yup.object().shape({
 		fullName: yup.string().required("This field should be filled"),
@@ -60,7 +60,7 @@ const UpdateProfile = () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/user/${id}`;
+		const url = `${localURL}/api/user/${userID._id}`;
 
 		await axios.patch(url, formData, config);
 

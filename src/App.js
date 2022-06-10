@@ -12,6 +12,7 @@ import MakePost from "./components/Post/MakePost";
 import DetailScreen from "./components/Profile/DetailScreen";
 import UpdateProfile from "./components/Profile/EditProfile";
 import PrivateAuth from "./components/Auth/PrivateAuth";
+import ProfilePage from "./components/Profile/ProfilePage";
 
 const App = () => {
 	return (
@@ -32,6 +33,15 @@ const App = () => {
 					element={
 						<PrivatePage>
 							<MakePost />
+						</PrivatePage>
+					}
+				/>
+
+				<Route
+					path="/profile"
+					element={
+						<PrivatePage>
+							<ProfilePage />
 						</PrivatePage>
 					}
 				/>

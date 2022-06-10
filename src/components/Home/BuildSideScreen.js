@@ -1,18 +1,25 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import pix from "./babe.jpeg";
 import DisplayCard from "./DisplayCard";
 
 const BuildSideScreen = () => {
 	const [display, setDisplay] = useState(false);
+	const user = useSelector((state) => state.signIn);
+
 	return (
 		<Container>
 			<Wrapper>
 				<Holder>
-					<Image src={pix} />
+					<Link to="/profile">
+						<Image src={user.avatar} />
+					</Link>
+
 					<Hold>
-						<Name>name</Name>
-						<Profile>profile</Profile>
+						<Name>{user.userName}</Name>
+						<Profile>{user.fullName}</Profile>
 					</Hold>
 				</Holder>
 
@@ -140,6 +147,8 @@ const Holder = styled.div`
 	display: flex;
 	align-items: center;
 	font-size: 18px;
+	text-decoration: none;
+	color: black;
 `;
 
 const Wrapper = styled.div`
