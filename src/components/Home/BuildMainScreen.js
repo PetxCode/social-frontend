@@ -17,7 +17,11 @@ import LikeComp from "./LikeComp";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import DisplayCard from "./DisplayCard";
-import { postState } from "../Global/GlobalState";
+import {
+	postState,
+	singleUserProfile,
+	singleUserProfileErase,
+} from "../Global/GlobalState";
 
 const BuildMainScreen = () => {
 	const [postData, setPostData] = useState([]);
@@ -89,7 +93,11 @@ const BuildMainScreen = () => {
 						<Icons>
 							<Hold>
 								<LikeComp props={props} />
-								<CommentIcon />
+								<CommentIcon
+									onClick={() => {
+										dispatch(singleUserProfileErase());
+									}}
+								/>
 								<SendIcon />
 							</Hold>
 

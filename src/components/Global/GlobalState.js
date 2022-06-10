@@ -5,6 +5,7 @@ const initialState = {
 	post: [],
 	singlePost: {},
 	singleUser: {},
+	profile: [],
 };
 
 const GlobalState = createSlice({
@@ -20,9 +21,19 @@ const GlobalState = createSlice({
 		singlePostState: (state, { payload }) => {
 			state.singlePost = payload;
 		},
+
 		singleUserState: (state, { payload }) => {
 			state.singleUser = payload;
 		},
+
+		singleUserProfile: (state, { payload }) => {
+			state.profile = payload;
+		},
+
+		singleUserProfileErase: (state) => {
+			state.profile = null;
+		},
+
 		signOut: (state) => {
 			state.signIn = null;
 		},
@@ -35,6 +46,8 @@ export const {
 	postState,
 	singlePostState,
 	singleUserState,
+	singleUserProfile,
+	singleUserProfileErase,
 } = GlobalState.actions;
 
 export default GlobalState.reducer;

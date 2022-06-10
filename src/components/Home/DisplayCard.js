@@ -48,7 +48,7 @@ const DisplayCard = ({ setDisplay, props }) => {
 		const mainURL = "https://social-backend22.herokuapp.com";
 
 		const url = `${localURL}/api/follow/${myUser._id}/${singlePost.user}}`;
-		const url2 = `http://localhost:3322/api/follow/${myUser._id}/62a0aa14afccb89e74e61f2f`;
+		const url2 = `http://localhost:3322/api/follow/${myUser._id}/${singlePost.user}`;
 		await axios.patch(url2);
 	};
 

@@ -32,7 +32,7 @@ const Header = () => {
 							<PostIcon />
 							<LoveIcon />
 							<Image
-								src={pix}
+								src={auth?.avatar}
 								onClick={() => {
 									Swal.fire({
 										icon: "info",

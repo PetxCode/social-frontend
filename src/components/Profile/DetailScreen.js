@@ -7,32 +7,27 @@ import { FiSettings } from "react-icons/fi";
 import { MdSlowMotionVideo } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { singlePostState } from "../Global/GlobalState";
 
 const DetailScreen = () => {
 	const { id } = useParams();
+
 	const userID = useSelector((state) => state.signIn);
+	const singlePost = useSelector((state) => state.singlePost);
+
+	const dispatch = useDispatch();
 
 	const [data, setData] = useState({});
 	const [mainUser, setMainUser] = useState({});
+	const [readUser, setReadUser] = useState({});
 	const [mainPost, setMainPost] = useState([]);
-
-	const getUserFromPost = async () => {
-		const localURL = "http://localhost:3322";
-		const mainURL = "https://social-backend22.herokuapp.com";
-
-		const url = `${localURL}/api/post/${id}`;
-		const url2 = `http://localhost:3322/api/post/62a0d6267709bdfcda71bf29`;
-		await axios.get(url).then((res) => {
-			setData(res.data.data);
-		});
-	};
 
 	const getUser = async () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/user/${data.user}/user`;
+		const url = `${localURL}/api/user/${singlePost.user}/user`;
 		await axios.get(url).then((res) => {
 			setMainUser(res.data.data);
 		});
@@ -48,23 +43,71 @@ const DetailScreen = () => {
 		});
 	};
 
+	const getUserData = async () => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${localURL}/api/user/${userID._id}`;
+		await axios.get(url).then((res) => {
+			setReadUser(res.data.data);
+			console.log("Personal: ", readUser);
+		});
+	};
+
+	const getUserFromPost = async () => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${localURL}/api/post/${id}`;
+
+		await axios.get(url).then((res) => {
+			dispatch(singlePostState(res.data.data));
+			setData(res.data.data);
+		});
+	};
+
 	const getFollowDataNow = async () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/follow/${userID._id}/${mainUser._id}}`;
-		await axios.patch(url).then((res) => {
-			console.log(res.data.message);
-			console.log("Done");
+		const workingURL =
+			"http://localhost:3322/api/follow/62a0b996cb9704a9e4a81a1c/62a0aa14afccb89e74e61f2f";
+
+		const mainURL2 = `http://localhost:3322/api/follow/${userID._id}/${singlePost.user}`;
+
+		const url = `${localURL}/api/follow/${singlePost.user}/${userID._id}}`;
+
+		await axios.patch(mainURL2).then((res) => {
+			console.log(`You are now following ${userID.fullName}...!`);
 		});
 	};
-	console.log(userID._id, data.user);
-	useEffect(() => {
-		// getUserFromPost();
-		getUser();
-		// getPost();
-		console.log(mainUser);
-	}, []);
+
+	const deleteFollowDataNow = async () => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const workingURL =
+			"http://localhost:3322/api/follow/62a0b996cb9704a9e4a81a1c/62a0aa14afccb89e74e61f2f";
+
+		const mainURL2 = `http://localhost:3322/api/follow/${userID._id}/${singlePost.user}`;
+
+		const url = `${localURL}/api/follow/${singlePost.user}/${userID._id}}`;
+
+		await axios.delete(mainURL2).then((res) => {
+			console.log(`You are no more following ${userID.fullName}...!`);
+		});
+	};
+
+	useEffect(
+		() => {
+			getUserFromPost();
+			getUser();
+			getUserData();
+		},
+		[
+			// id, postData
+		]
+	);
 
 	const [post, setPost] = useState(true);
 	const [video, setVideo] = useState(false);
@@ -85,14 +128,27 @@ const DetailScreen = () => {
 									Edit Profile
 								</EditButton>
 							) : (
-								<Botton
-									onClick={() => {
-										getFollowDataNow();
-										console.log("Done: ", userID._id, mainUser._id);
-									}}
-								>
-									Follow
-								</Botton>
+								<div>
+									{readUser?.following?.includes(singlePost.user) ? (
+										<Botton
+											onClick={() => {
+												getFollowDataNow();
+												console.log("Done: ", userID._id, mainUser._id);
+											}}
+										>
+											Follow
+										</Botton>
+									) : (
+										<Botton
+											onClick={() => {
+												deleteFollowDataNow();
+												console.log("Done: ", userID._id, mainUser._id);
+											}}
+										>
+											Unfollow
+										</Botton>
+									)}
+								</div>
 							)}
 
 							<Icon />

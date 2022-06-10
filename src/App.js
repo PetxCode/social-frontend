@@ -11,6 +11,7 @@ import HomeScreen from "./components/Home/HomeScreen";
 import MakePost from "./components/Post/MakePost";
 import DetailScreen from "./components/Profile/DetailScreen";
 import UpdateProfile from "./components/Profile/EditProfile";
+import PrivateAuth from "./components/Auth/PrivateAuth";
 
 const App = () => {
 	return (
@@ -53,13 +54,47 @@ const App = () => {
 					}
 				/>
 
-				<Route path="/register" element={<Register />} />
-				<Route path="/signin" element={<SignIn />} />
-				<Route path="/requestReset" element={<ResetPassword />} />
-				<Route path="/api/user/reset/:id/:token" element={<NewPassword />} />
+				<Route
+					path="/register"
+					element={
+						<PrivateAuth>
+							<Register />
+						</PrivateAuth>
+					}
+				/>
+
+				<Route
+					path="/signin"
+					element={
+						<PrivateAuth>
+							<SignIn />
+						</PrivateAuth>
+					}
+				/>
+
+				<Route
+					path="/requestReset"
+					element={
+						<PrivateAuth>
+							<ResetPassword />
+						</PrivateAuth>
+					}
+				/>
+				<Route
+					path="/api/user/reset/:id/:token"
+					element={
+						<PrivateAuth>
+							<NewPassword />
+						</PrivateAuth>
+					}
+				/>
 				<Route
 					path="/api/user/token/:id/:token"
-					element={<ConfirmEmailVerification />}
+					element={
+						<PrivateAuth>
+							<ConfirmEmailVerification />
+						</PrivateAuth>
+					}
 				/>
 			</Routes>
 		</BrowserRouter>
