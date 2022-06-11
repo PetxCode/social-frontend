@@ -29,7 +29,10 @@ const Header = () => {
 					{auth ? (
 						<div>
 							<HomeIcon />
-							<PostIcon />
+							<Link to="/post">
+								<PostIcon />
+							</Link>
+
 							<LoveIcon />
 							<Image
 								src={auth?.avatar}

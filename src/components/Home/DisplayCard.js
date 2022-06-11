@@ -95,7 +95,7 @@ const DisplayCard = ({ setDisplay, props }) => {
 
 				<Bottom>
 					{singleUser?.post?.map((props) => (
-						<Images src={props.avatar} key={props.user} />
+						<Images src={props.avatar} key={props._id} />
 					))}
 				</Bottom>
 				{myUser._id === singlePost.user ? null : (

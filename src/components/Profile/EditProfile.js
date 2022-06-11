@@ -72,6 +72,7 @@ const UpdateProfile = () => {
 		}).then(() => {
 			naviagte(-1);
 		});
+		reset();
 	});
 
 	useEffect(() => {}, []);

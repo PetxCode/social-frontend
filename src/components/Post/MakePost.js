@@ -7,7 +7,7 @@ import { GiPadlock } from "react-icons/gi";
 import { BsFillPersonFill } from "react-icons/bs";
 import { BiMessageAltDetail } from "react-icons/bi";
 import { MdPassword } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,8 +15,11 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 
 const MakePost = () => {
+	const navigate = useNavigate();
+	const auth = useSelector((state) => state.signIn);
 	const [image, setImage] = useState(pix);
 	const [avatar, setAvatar] = useState("");
 
@@ -40,10 +43,11 @@ const MakePost = () => {
 
 	const onSubmit = handleSubmit(async (val) => {
 		const { message } = val;
-
+		console.log(val);
 		const formData = new FormData();
 
-		formData.append("fullName", message);
+		formData.append("message", message);
+		formData.append("avatar", avatar);
 
 		const config = {
 			"content-type": "multipart/form-data",
@@ -52,15 +56,17 @@ const MakePost = () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/user/register`;
+		const url = `${localURL}/api/post/${auth._id}/post`;
 
 		await axios.post(url, formData, config);
 
 		Swal.fire({
 			icon: "success",
-			title: "Verify your Account",
-			text: "Check your mail for complete registeration",
+			title: "Post has been created",
+			text: "See more posts",
 			footer: '<a href="">This is developed by CodeLab Students: set05</a>',
+		}).then(() => {
+			navigate("/");
 		});
 	});
 
