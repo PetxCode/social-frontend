@@ -27,7 +27,7 @@ const DetailScreen = () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/user/${singlePost.user}/user`;
+		const url = `${localURL}/api/user/${singlePost?.user}/user`;
 		await axios.get(url).then((res) => {
 			setMainUser(res.data.data);
 		});
@@ -37,7 +37,7 @@ const DetailScreen = () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/post/${data.user}/${id}`;
+		const url = `${localURL}/api/post/${data?.user}/${id}`;
 		await axios.get(url).then((res) => {
 			setMainPost(res.data.data);
 		});
@@ -50,7 +50,7 @@ const DetailScreen = () => {
 		const url = `${localURL}/api/user/${userID._id}`;
 		await axios.get(url).then((res) => {
 			setReadUser(res.data.data);
-			console.log("Personal: ", readUser);
+			console.log("Personal: ", readUser, res.data.data);
 		});
 	};
 
@@ -98,16 +98,11 @@ const DetailScreen = () => {
 		});
 	};
 
-	useEffect(
-		() => {
-			getUserFromPost();
-			getUser();
-			getUserData();
-		},
-		[
-			// id, postData
-		]
-	);
+	useEffect(() => {
+		getUserFromPost();
+		getUser();
+		getUserData();
+	}, [readUser]);
 
 	const [post, setPost] = useState(true);
 	const [video, setVideo] = useState(false);
@@ -129,7 +124,7 @@ const DetailScreen = () => {
 								</EditButton>
 							) : (
 								<div>
-									{userID?.following?.includes(singlePost.user) ? (
+									{userID?.following?.includes(singlePost?.user) ? (
 										<Botton
 											onClick={() => {
 												deleteFollowDataNow();
@@ -172,7 +167,7 @@ const DetailScreen = () => {
 
 						<NameDetails>
 							<Post>
-								<Count>{mainUser?.post?.length}</Count>
+								<Count>{mainPost?.post?.length}</Count>
 								<Title>Posts</Title>
 							</Post>
 							<Post>
@@ -187,10 +182,7 @@ const DetailScreen = () => {
 
 						<Detail>
 							<Name>{mainUser.fullName}</Name>
-							<Bio>
-								Cinematographer, Post production, Tech entrepreneur, public
-								speaker and a serial entrepreneur.
-							</Bio>
+							<Bio>{mainUser.bio}</Bio>
 							<WebSite href="#">Skillhub.com</WebSite>
 						</Detail>
 					</Contents>

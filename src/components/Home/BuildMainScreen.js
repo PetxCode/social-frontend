@@ -31,6 +31,7 @@ const BuildMainScreen = () => {
 	const post = useSelector((state) => state.post);
 
 	const [display, setDisplay] = useState(false);
+	const [comment, setComment] = useState("");
 
 	const getPosts = async () => {
 		const localURL = "http://localhost:3322";
@@ -41,6 +42,16 @@ const BuildMainScreen = () => {
 		await axios.get(url).then((res) => {
 			dispatch(postState(res.data.data));
 		});
+	};
+
+	const makeComments = async (ID) => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${localURL}/api/comment/${user._id}/${ID}`;
+
+		await axios.post(url, { comment });
+		setComment("");
 	};
 
 	useEffect(() => {
@@ -95,7 +106,7 @@ const BuildMainScreen = () => {
 								<LikeComp props={props} />
 								<CommentIcon
 									onClick={() => {
-										dispatch(singleUserProfileErase());
+										// dispatch(singleUserProfileErase());
 									}}
 								/>
 								<SendIcon />
@@ -118,7 +129,7 @@ const BuildMainScreen = () => {
 						</Post>
 
 						<View>
-							View All <span>{0}</span> comments{" "}
+							View All <span>{props.comment.length}</span> comments{" "}
 						</View>
 
 						<Comment>
@@ -135,8 +146,21 @@ const BuildMainScreen = () => {
 
 						<PostInput>
 							<PostIcon />
-							<Input placeholder="Add a commment..." />
-							<Text>Post</Text>
+							<Input
+								placeholder="Add a commment..."
+								value={comment}
+								onChange={(e) => {
+									setComment(e.target.value);
+								}}
+							/>
+							<Text
+								onClick={() => {
+									makeComments(props._id);
+									console.log("Click: ", props._id);
+								}}
+							>
+								Post
+							</Text>
 						</PostInput>
 					</PostBuild>
 				))}

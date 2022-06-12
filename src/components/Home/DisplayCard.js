@@ -18,21 +18,28 @@ const DisplayCard = ({ setDisplay, props }) => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/post/${props._id}`;
+		const url = `${localURL}/api/post/${props?._id}`;
 		await axios.get(url).then((res) => {
-			dispatch(singlePostState(res.data.data));
+			setPostData(res.data.data);
+
+			// console.log("Post Data: ", postData);
+			// dispatch(singlePostState(res.data.data));
 		});
 	};
+
+	// console.log(props?._id, postData?.user);
 
 	const getUserData = async () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/user/${singlePost.user}/user`;
+		const url = `${localURL}/api/user/${postData?.user}/user`;
 		await axios.get(url).then((res) => {
-			dispatch(singleUserState(res.data.data));
+			setUserData(res.data.data);
 		});
 	};
+
+	console.log("userData: ", userData);
 
 	const getFollowData = async () => {
 		const localURL = "http://localhost:3322";
@@ -48,14 +55,14 @@ const DisplayCard = ({ setDisplay, props }) => {
 		const mainURL = "https://social-backend22.herokuapp.com";
 
 		const url = `${localURL}/api/follow/${myUser._id}/${singlePost.user}}`;
-		const url2 = `http://localhost:3322/api/follow/${myUser._id}/${singlePost.user}`;
+		const url2 = `http://localhost:3322/api/follow/${myUser?._id}/${singlePost.user}`;
 		await axios.patch(url2);
 	};
 
 	useEffect(() => {
 		getPostData();
 		getUserData();
-	}, []);
+	}, [postData, userData]);
 	return (
 		<Container
 			onMouseEnter={() => {
@@ -67,10 +74,10 @@ const DisplayCard = ({ setDisplay, props }) => {
 		>
 			<Wrapper>
 				<Top>
-					<Image src={singleUser.avatar} />
+					<Image src={userData?.avatar} />
 					<Holder>
-						<Name>{singleUser.userName}</Name>
-						<RealName>{singleUser.fullName}</RealName>
+						<Name>{userData?.userName}</Name>
+						<RealName>{userData?.fullName}</RealName>
 
 						<Follow>
 							Followed by <span>Another Name</span>
@@ -80,29 +87,29 @@ const DisplayCard = ({ setDisplay, props }) => {
 
 				<Middle>
 					<CountHolder>
-						<Count>{singleUser?.post?.length}</Count>
+						<Count>{userData?.post?.length}</Count>
 						<Title>Post</Title>
 					</CountHolder>
 					<CountHolder>
-						<Count>{singleUser?.follower?.length}</Count>
+						<Count>{userData?.follower?.length}</Count>
 						<Title>follower</Title>
 					</CountHolder>
 					<CountHolder>
-						<Count>{singleUser?.following?.length}</Count>
+						<Count>{userData?.following?.length}</Count>
 						<Title>following</Title>
 					</CountHolder>
 				</Middle>
 
 				<Bottom>
-					{singleUser?.post?.map((props) => (
-						<Images src={props.avatar} key={props._id} />
+					{userData?.post?.map((props) => (
+						<Images src={props?.avatar} key={props?._id} />
 					))}
 				</Bottom>
-				{myUser._id === singlePost.user ? null : (
+				{myUser?._id === userData?.user ? null : (
 					<Botton
 						onClick={() => {
 							getFollowDataNow();
-							console.log("Hello:", myUser._id, singlePost.user);
+							console.log("Hello:", myUser?._id, userData?.user);
 						}}
 					>
 						Follow

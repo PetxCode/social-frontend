@@ -3,9 +3,11 @@ import axios from "axios";
 import PersonalInfo from "./PersonalInfo";
 import CommentProfile from "./CommentProfile";
 import styled from "styled-components";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
 const CommentCOmp = ({ props, comm }) => {
+	const user = useSelector((state) => state.signIn);
 	const [data, setData] = useState([]);
 
 	const getComments = async () => {
@@ -17,6 +19,24 @@ const CommentCOmp = ({ props, comm }) => {
 		await axios.get(url2).then((res) => {
 			setData(res.data.data);
 		});
+	};
+
+	const likePost = async (id) => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${localURL}/api/comment/like/${user._id}/${props._id}/${id}`;
+
+		await axios.post(url);
+	};
+
+	const dislikePost = async (id) => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `http://localhost:3322/api/comment/like/${user._id}/${props._id}/${id}`;
+
+		await axios.delete(url);
 	};
 
 	useEffect(() => {
@@ -31,9 +51,23 @@ const CommentCOmp = ({ props, comm }) => {
 							<CommentProfile props={props} userInfo />
 							<div> {props?.comment} </div>
 							<Space />
-							<LoveIconComment />
+							{props?.like.includes(user._id) ? (
+								<LoveIconComment1
+									onClick={() => {
+										dislikePost(props._id);
+										console.log("file deleted");
+									}}
+								/>
+							) : (
+								<LoveIconComment
+									onClick={() => {
+										likePost(props._id);
+									}}
+								/>
+							)}
+
 							<div>
-								Total like: <span>{0}</span>
+								Total like: <span>{props.like.length}</span>
 							</div>
 						</Div>
 					))}
@@ -56,6 +90,18 @@ const Div = styled.div`
 	display: flex;
 	width: 100%;
 	margin: 5px 0;
+`;
+
+const LoveIconComment1 = styled(AiFillHeart)`
+	font-size: 18px;
+	transition: all 350ms;
+	color: gray;
+	margin-right: 5px;
+	color: red;
+	:hover {
+		cursor: pointer;
+		color: silver;
+	}
 `;
 
 const LoveIconComment = styled(AiOutlineHeart)`
