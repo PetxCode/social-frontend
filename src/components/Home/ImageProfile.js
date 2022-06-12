@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import { Offline, Online } from "react-detect-offline";
 
 const ViewImage = ({ props, userInfo, name, myImage }) => {
 	const id = props.user;
@@ -21,13 +22,43 @@ const ViewImage = ({ props, userInfo, name, myImage }) => {
 	}, []);
 
 	return (
-		<div>
+		<Container>
+			<Holder>
+				<Offline>
+					<Dot />
+				</Offline>
+				<Online>
+					<Dot1 />
+				</Online>
+			</Holder>
 			<ImageProfile src={user.avatar} />
-		</div>
+		</Container>
 	);
 };
 
 export default ViewImage;
+
+const Dot1 = styled.div`
+	width: 15px;
+	height: 15px;
+	background-color: green;
+	border-radius: 50%;
+`;
+
+const Dot = styled.div`
+	width: 15px;
+	height: 15px;
+	background-color: red;
+	border-radius: 50%;
+`;
+const Holder = styled.div`
+	position: absolute;
+	right: 15px;
+	top: -5px;
+`;
+const Container = styled.div`
+	position: relative;
+`;
 
 const ImageProfile = styled.img`
 	width: 35px;
