@@ -14,7 +14,7 @@ const CommentCOmp = ({ props, comm }) => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/comment/"62a0b996cb9704a9e4a81a1c/"62a0d6267709bdfcda71bf29`;
+		const url = `${mainURL}/api/comment/"62a0b996cb9704a9e4a81a1c/"62a0d6267709bdfcda71bf29`;
 		const url2 = `http://localhost:3322/api/comment/${props.user}/${props._id}/`;
 		await axios.get(url2).then((res) => {
 			setData(res.data.data);
@@ -25,7 +25,7 @@ const CommentCOmp = ({ props, comm }) => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/comment/like/${user._id}/${props._id}/${id}`;
+		const url = `${mainURL}/api/comment/like/${user._id}/${props._id}/${id}`;
 
 		await axios.post(url);
 	};
@@ -34,7 +34,7 @@ const CommentCOmp = ({ props, comm }) => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `http://localhost:3322/api/comment/like/${user._id}/${props._id}/${id}`;
+		const url = `${mainURL}/api/comment/like/${user._id}/${props._id}/${id}`;
 
 		await axios.delete(url);
 	};

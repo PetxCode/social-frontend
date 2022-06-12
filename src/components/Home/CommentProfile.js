@@ -11,7 +11,7 @@ const CommentProfile = ({ props, userInfo, name, myImage }) => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/user/${id}`;
+		const url = `${mainURL}/api/user/${id}`;
 		await axios.get(url).then((res) => {
 			setUser(res.data.data);
 		});

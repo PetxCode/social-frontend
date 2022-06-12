@@ -37,7 +37,7 @@ const BuildMainScreen = () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/post/posts`;
+		const url = `${mainURL}/api/post/posts`;
 
 		await axios.get(url).then((res) => {
 			dispatch(postState(res.data.data));
@@ -48,7 +48,7 @@ const BuildMainScreen = () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/comment/${user._id}/${ID}`;
+		const url = `${mainURL}/api/comment/${user._id}/${ID}`;
 
 		await axios.post(url, { comment });
 		setComment("");

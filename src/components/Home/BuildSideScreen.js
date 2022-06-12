@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -8,6 +9,21 @@ import DisplayCard from "./DisplayCard";
 const BuildSideScreen = () => {
 	const [display, setDisplay] = useState(false);
 	const user = useSelector((state) => state.signIn);
+	const [getUsers, setGetUsers] = useState([]);
+
+	const allUsers = async () => {
+		const localURL = "http://localhost:3322";
+		const mainURL = "https://social-backend22.herokuapp.com";
+
+		const url = `${mainURL}/api/user`;
+		await axios.get(url).then((res) => {
+			setGetUsers(res.data.data);
+		});
+	};
+
+	useEffect(() => {
+		allUsers();
+	}, []);
 
 	return (
 		<Container>
@@ -28,33 +44,41 @@ const BuildSideScreen = () => {
 					<Action>See All</Action>
 				</Text>
 
-				<Text>
-					<Holder>
-						<Image1 src={pix} />
+				{getUsers?.map((props) => (
+					<Text key={props._id}>
+						<Holder>
+							<Image1 src={props.avatar} />
 
-						<Hold>
-							<RealName
-								onMouseEnter={() => {
-									setDisplay(true);
-								}}
-								onMouseLeave={() => {
-									setDisplay(false);
-								}}
-							>
-								name
-							</RealName>
-							<Profile>profile</Profile>
+							<Hold>
+								<RealName
+									onMouseEnter={() => {
+										setDisplay(true);
+									}}
+									onMouseLeave={() => {
+										setDisplay(false);
+									}}
+								>
+									{props.userName}
+								</RealName>
+								<Profile>{props.fullName}</Profile>
 
-							{display ? (
-								<Div>
-									<DisplayCard setDisplay={setDisplay} />{" "}
-								</Div>
-							) : null}
-						</Hold>
-					</Holder>
+								{display ? (
+									<Div>
+										<DisplayCard setDisplay={setDisplay} props={props} />{" "}
+									</Div>
+								) : null}
+							</Hold>
+						</Holder>
 
-					<Content>Follow</Content>
-				</Text>
+						<Content
+							onClick={() => {
+								console.log(props._id);
+							}}
+						>
+							Follow
+						</Content>
+					</Text>
+				))}
 			</Wrapper>
 		</Container>
 	);

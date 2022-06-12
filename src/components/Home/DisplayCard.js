@@ -18,7 +18,7 @@ const DisplayCard = ({ setDisplay, props }) => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/post/${props?._id}`;
+		const url = `${mainURL}/api/post/${props?._id}`;
 		await axios.get(url).then((res) => {
 			setPostData(res.data.data);
 
@@ -33,7 +33,7 @@ const DisplayCard = ({ setDisplay, props }) => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/user/${postData?.user}/user`;
+		const url = `${mainURL}/api/user/${postData?.user}/user`;
 		await axios.get(url).then((res) => {
 			setUserData(res.data.data);
 		});
@@ -45,7 +45,7 @@ const DisplayCard = ({ setDisplay, props }) => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/follow}`;
+		const url = `${mainURL}/api/follow}`;
 		await axios.post(url, { follower: myUser._id, following: postData.user });
 		console.log(myUser._id, postData.user);
 	};
@@ -54,7 +54,7 @@ const DisplayCard = ({ setDisplay, props }) => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/follow/${myUser._id}/${singlePost.user}}`;
+		const url = `${mainURL}/api/follow/${myUser._id}/${singlePost.user}}`;
 		const url2 = `http://localhost:3322/api/follow/${myUser?._id}/${singlePost.user}`;
 		await axios.patch(url2);
 	};
@@ -73,6 +73,7 @@ const DisplayCard = ({ setDisplay, props }) => {
 			}}
 		>
 			<Wrapper>
+				{props._id}
 				<Top>
 					<Image src={userData?.avatar} />
 					<Holder>

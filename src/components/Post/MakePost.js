@@ -56,7 +56,7 @@ const MakePost = () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/post/${auth._id}/post`;
+		const url = `${mainURL}/api/post/${auth._id}/post`;
 
 		await axios.post(url, formData, config);
 

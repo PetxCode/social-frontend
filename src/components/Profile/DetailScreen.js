@@ -27,7 +27,7 @@ const DetailScreen = () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/user/${singlePost?.user}/user`;
+		const url = `${mainURL}/api/user/${singlePost?.user}/user`;
 		await axios.get(url).then((res) => {
 			setMainUser(res.data.data);
 		});
@@ -37,7 +37,7 @@ const DetailScreen = () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/post/${data?.user}/${id}`;
+		const url = `${mainURL}/api/post/${data?.user}/${id}`;
 		await axios.get(url).then((res) => {
 			setMainPost(res.data.data);
 		});
@@ -47,7 +47,7 @@ const DetailScreen = () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/user/${userID._id}`;
+		const url = `${mainURL}/api/user/${userID._id}`;
 		await axios.get(url).then((res) => {
 			setReadUser(res.data.data);
 			console.log("Personal: ", readUser, res.data.data);
@@ -58,7 +58,7 @@ const DetailScreen = () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/post/${id}`;
+		const url = `${mainURL}/api/post/${id}`;
 
 		await axios.get(url).then((res) => {
 			dispatch(singlePostState(res.data.data));
@@ -73,7 +73,7 @@ const DetailScreen = () => {
 		const workingURL =
 			"http://localhost:3322/api/follow/62a0b996cb9704a9e4a81a1c/62a0aa14afccb89e74e61f2f";
 
-		const mainURL2 = `http://localhost:3322/api/follow/${userID._id}/${singlePost.user}`;
+		const mainURL2 = `https://social-backend22.herokuapp.com/api/follow/${userID._id}/${singlePost.user}`;
 
 		const url = `${localURL}/api/follow/${singlePost.user}/${userID._id}}`;
 
@@ -89,7 +89,7 @@ const DetailScreen = () => {
 		const workingURL =
 			"http://localhost:3322/api/follow/62a0b996cb9704a9e4a81a1c/62a0aa14afccb89e74e61f2f";
 
-		const mainURL2 = `http://localhost:3322/api/follow/${userID._id}/${singlePost.user}`;
+		const mainURL2 = `https://social-backend22.herokuapp.com/api/follow/${userID._id}/${singlePost.user}`;
 
 		const url = `${localURL}/api/follow/${singlePost.user}/${userID._id}}`;
 

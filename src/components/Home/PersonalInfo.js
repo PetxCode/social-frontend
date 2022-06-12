@@ -15,7 +15,7 @@ const PersonalInfo = ({ props, userInfo, name, myImage }) => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/user/${id}`;
+		const url = `${mainURL}/api/user/${id}`;
 		await axios.get(url).then((res) => {
 			// dispatch(singleUserProfile(res.data.data));
 			setUser(res.data.data);

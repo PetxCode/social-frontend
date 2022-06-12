@@ -60,7 +60,7 @@ const UpdateProfile = () => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/user/${userID._id}`;
+		const url = `${mainURL}/api/user/${userID._id}`;
 
 		await axios.patch(url, formData, config);
 

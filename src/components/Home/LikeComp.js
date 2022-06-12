@@ -13,7 +13,7 @@ const LikeComp = ({ props }) => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/like/${user._id}/${id}`;
+		const url = `${mainURL}/api/like/${user._id}/${id}`;
 
 		await axios.post(url).then((res) => {
 			setPostData(res.data.data);
@@ -24,7 +24,7 @@ const LikeComp = ({ props }) => {
 		const localURL = "http://localhost:3322";
 		const mainURL = "https://social-backend22.herokuapp.com";
 
-		const url = `${localURL}/api/like/${user._id}/${id}`;
+		const url = `${mainURL}/api/like/${user._id}/${id}`;
 
 		await axios.delete(url).then((res) => {
 			setPostData(res.data.data);
